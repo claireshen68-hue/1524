@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 專家 | 企業轉型顧問與產品經理</title>
+    
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 引入 Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- 引入 FontAwesome 圖示 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            900: '#1e3a8a',
+                        },
+                        accent: {
+                            400: '#34d399', // emerald-400
+                            500: '#10b981', // emerald-500
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* 自定義樣式與動畫 */
+        body {
+            font-family: 'Inter', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            background-color: #0f172a; /* slate-900 */
+            color: #cbd5e1; /* slate-300 */
+        }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+
+        /* 滾動動畫隱藏初始狀態 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden selection:bg-brand-500 selection:text-white">
+
+    <!-- 導覽列 -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-2xl font-bold text-white tracking-tighter">
+                        AI<span class="text-brand-400">Expert.</span>
+                    </a>
+                </div>
+                
+                <!-- 桌面版選單 -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="text-slate-300 hover:text-white transition-colors text-sm font-medium">首頁</a>
+                    <a href="#about" class="text-slate-300 hover:text-white transition-colors text-sm font-medium">關於我</a>
+                    <a href="#services" class="text-slate-300 hover:text-white transition-colors text-sm font-medium">AI 解決方案</a>
+                    <a href="#portfolio" class="text-slate-300 hover:text-white transition-colors text-sm font-medium">精選案例</a>
+                    <a href="#blog" class="text-slate-300 hover:text-white transition-colors text-sm font-medium">觀點</a>
+                    <a href="#contact" class="px-5 py-2 rounded-full bg-brand-600 hover:bg-brand-500 text-white transition-all text-sm font-medium shadow-lg shadow-brand-500/30">聯絡我</a>
+                </div>
+
+                <!-- 手機版選單按鈕 -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-slate-300 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 手機版下拉選單 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 absolute w-full">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-700">首頁</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-700">關於我</a>
+                <a href="#services" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-700">AI 解決方案</a>
+                <a href="#portfolio" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-700">精選案例</a>
+                <a href="#blog" class="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-700">觀點</a>
+                <a href="#contact" class="block px-3 py-2 mt-4 text-center rounded-md text-base font-medium bg-brand-600 text-white hover:bg-brand-500">聯絡我</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首頁 (Hero Section) -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 pb-12 overflow-hidden">
+        <!-- 背景裝飾 -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-500/20 rounded-full mix-blend-screen filter blur-3xl opacity-50 animate-blob"></div>
+        <div class="absolute top-1/3 right-1/4 w-96 h-96 bg-accent-500/20 rounded-full mix-blend-screen filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center px-4 py-2 rounded-full border border-slate-700 bg-slate-800/50 text-sm text-slate-300 mb-8 reveal">
+                <span class="flex h-2 w-2 rounded-full bg-accent-400 mr-2"></span>
+                開放接案中：AI 策略與技術導入
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 leading-tight reveal">
+                驅動企業成長的 <br class="hidden md:block">
+                <span class="gradient-text">AI 轉型與應用架構</span>
+            </h1>
+            
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-400 mb-10 reveal">
+                我是專注於 AI 產品開發與企業賦能的顧問。透過提示詞工程、LLM 應用架構與策略規劃，協助您將前沿 AI 技術轉化為實際的商業價值。
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 reveal">
+                <a href="#services" class="px-8 py-4 rounded-full bg-white text-slate-900 font-bold hover:bg-slate-100 transition-all shadow-lg shadow-white/10 w-full sm:w-auto text-center">
+                    了解解決方案
+                </a>
+                <a href="#contact" class="px-8 py-4 rounded-full border border-slate-600 text-white font-semibold hover:bg-slate-800 transition-all w-full sm:w-auto text-center">
+                    與我聊聊 <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 關於我 (About Me) -->
+    <section id="about" class="py-24 bg-slate-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- 圖片區塊 -->
+                <div class="relative reveal">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-brand-500 to-accent-500 rounded-2xl transform translate-x-4 translate-y-4 opacity-50"></div>
+                    <img src="https://placehold.co/600x800/1e293b/cbd5e1?text=Professional+Portrait" alt="專業形象照" class="relative z-10 rounded-2xl w-full object-cover shadow-2xl border border-slate-700">
+                    
+                    <!-- 浮動經驗徽章 -->
+                    <div class="absolute -bottom-6 -left-6 bg-slate-800 border border-slate-700 p-6 rounded-xl shadow-xl z-20 flex items-center space-x-4">
+                        <div class="bg-brand-500/20 p-3 rounded-lg text-brand-400">
+                            <i class="fas fa-award text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-bold text-white">8+</p>
+                            <p class="text-sm text-slate-400">年科技產業經驗</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 文字與技能區塊 -->
+                <div class="reveal">
+                    <h2 class="text-brand-400 font-semibold tracking-wide uppercase text-sm mb-2">My Story</h2>
+                    <h3 class="text-3xl md:text-4xl font-bold text-white mb-6">從數據科學到生成式 AI 的橋樑</h3>
+                    
+                    <div class="space-y-4 text-slate-400 mb-8 leading-relaxed">
+                        <p>
+                            在過去幾年中，我見證了 AI 技術如何顛覆傳統工作流程。作為一名前端工程師轉型的 AI 產品經理，我深刻理解技術落地時面臨的挑戰。
+                        </p>
+                        <p>
+                            我的核心理念是「實用主義 AI」。比起盲目追求最新模型，我更專注於如何利用 Prompt Engineering、RAG 技術，為企業量身打造真正能解決痛點、提升效率的自動化流程與產品。
+                        </p>
+                    </div>
+
+                    <!-- 專業技能標籤 -->
+                    <h4 class="text-lg font-semibold text-white mb-4">核心專業領域</h4>
+                    <div class="flex flex-wrap gap-3 mb-8">
+                        <span class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-300 hover:border-brand-500 transition-colors">LLM 應用架構 (RAG/Agent)</span>
+                        <span class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-300 hover:border-brand-500 transition-colors">Prompt Engineering</span>
+                        <span class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-300 hover:border-brand-500 transition-colors">AI 產品策略與規劃</span>
+                        <span class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-300 hover:border-brand-500 transition-colors">企業數位轉型</span>
+                        <span class="px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-300 hover:border-brand-500 transition-colors">Python / LangChain</span>
+                    </div>
+                    
+                    <a href="#portfolio" class="inline-flex items-center text-brand-400 hover:text-brand-300 font-medium transition-colors">
+                        查看過往專案 <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI 解決方案服務 (Services) -->
+    <section id="services" class="py-24 bg-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-brand-400 font-semibold tracking-wide uppercase text-sm mb-2">Solutions</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-white mb-6">全方位的 AI 賦能服務</h3>
+                <p class="text-slate-400">從策略藍圖到技術落地，提供企業級的 AI 導入方案，助您在 AI 時代保持競爭優勢。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                <!-- 服務 1 -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-8 card-hover reveal">
+                    <div class="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-chess-knight text-2xl text-blue-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">企業 AI 轉型顧問</h4>
+                    <p class="text-slate-400 mb-6 leading-relaxed">
+                        深入了解企業痛點，評估 AI 導入可行性。提供涵蓋技術架構、資料安全與效益評估的全面性策略藍圖，並協助建立內部 AI 治理規範。
+                    </p>
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> 需求評估與流程診斷</li>
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> ROI 效益與風險評估</li>
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> 技術架構選型建議</li>
+                    </ul>
+                </div>
+
+                <!-- 服務 2 -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-8 card-hover reveal">
+                    <div class="w-14 h-14 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-terminal text-2xl text-emerald-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">提示詞工程與 LLM 導入</h4>
+                    <p class="text-slate-400 mb-6 leading-relaxed">
+                        突破通用模型的限制，透過專業的 Prompt 設計與 RAG (檢索增強生成) 技術，讓 AI 能根據企業內部知識庫提供精準、專業的回覆。
+                    </p>
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> 企業專屬提示詞庫建置</li>
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> RAG 知識庫系統整合</li>
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> AI Agent 自動化工作流設計</li>
+                    </ul>
+                </div>
+
+                <!-- 服務 3 -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-8 card-hover reveal">
+                    <div class="w-14 h-14 bg-purple-500/10 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-layer-group text-2xl text-purple-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">AI 產品管理與開發</h4>
+                    <p class="text-slate-400 mb-6 leading-relaxed">
+                        將 AI 技術轉化為好用的產品。負責從使用者需求收斂、UI/UX 設計、原型製作到技術開發協調，確保 AI 產品順利上市。
+                    </p>
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> 最小可行性產品 (MVP) 規劃</li>
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> 使用者體驗 (UX) 設計</li>
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> 跨部門溝通與開發敏捷管理</li>
+                    </ul>
+                </div>
+
+                <!-- 服務 4 -->
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-8 card-hover reveal">
+                    <div class="w-14 h-14 bg-orange-500/10 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-chalkboard-user text-2xl text-orange-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">企業內訓與工作坊</h4>
+                    <p class="text-slate-400 mb-6 leading-relaxed">
+                        消弭員工對 AI 的焦慮，提升團隊整體 AI 素養。提供客製化的實戰工作坊，讓員工能立即將 ChatGPT 等工具應用於日常業務中。
+                    </p>
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> 基礎生成式 AI 原理科普</li>
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> 實用 Prompt 撰寫技巧演練</li>
+                        <li class="flex items-start"><i class="fas fa-check text-accent-400 mt-1 mr-3"></i> 跨部門應用案例發想工作坊</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 作品集/案例展示 (Portfolio) -->
+    <section id="portfolio" class="py-24 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+                <div class="max-w-2xl">
+                    <h2 class="text-brand-400 font-semibold tracking-wide uppercase text-sm mb-2">Featured Cases</h2>
+                    <h3 class="text-3xl md:text-4xl font-bold text-white mb-4">實戰案例展示</h3>
+                    <p class="text-slate-400">探索我如何運用 AI 技術為不同產業解決實際問題並創造可衡量的價值。</p>
+                </div>
+                <div class="mt-6 md:mt-0">
+                    <a href="#" class="inline-flex items-center text-brand-400 hover:text-brand-300 font-medium transition-colors">
+                        查看完整作品集 <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- 專案 1 -->
+                <div class="group relative bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 reveal card-hover">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://placehold.co/800x600/1e293b/94a3b8?text=E-commerce+AI+Bot" alt="專案截圖" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-slate-900/40 group-hover:bg-transparent transition-colors duration-300"></div>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 text-xs font-medium bg-brand-500/20 text-brand-400 rounded-full">電子商務</span>
+                            <span class="px-3 py-1 text-xs font-medium bg-slate-700 text-slate-300 rounded-full">RAG 技術</span>
+                        </div>
+                        <h4 class="text-2xl font-bold text-white mb-3 group-hover:text-brand-400 transition-colors">智能客服知識庫整合系統</h4>
+                        <p class="text-slate-400 mb-6 text-sm leading-relaxed">
+                            為大型電商平台導入基於 LLM 與企業內部 SOP 文件的 RAG 系統，精準回答高達 80% 的常見客服問題。
+                        </p>
+                        
+                        <div class="pt-6 border-t border-slate-700 grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xs text-slate-500 mb-1">具體成果</p>
+                                <p class="text-lg font-bold text-accent-400">-40% <span class="text-sm font-normal text-slate-400">客服回應時間</span></p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 mb-1">核心技術</p>
+                                <p class="text-sm font-medium text-slate-300">LangChain, OpenAI API</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="absolute inset-0 z-10"><span class="sr-only">查看專案詳情</span></a>
+                </div>
+
+                <!-- 專案 2 -->
+                <div class="group relative bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 reveal card-hover">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://placehold.co/800x600/1e293b/94a3b8?text=Internal+AI+Tool" alt="專案截圖" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-slate-900/40 group-hover:bg-transparent transition-colors duration-300"></div>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 text-xs font-medium bg-purple-500/20 text-purple-400 rounded-full">金融科技</span>
+                            <span class="px-3 py-1 text-xs font-medium bg-slate-700 text-slate-300 rounded-full">Prompt Engineering</span>
+                        </div>
+                        <h4 class="text-2xl font-bold text-white mb-3 group-hover:text-brand-400 transition-colors">法遵文件自動審查助手</h4>
+                        <p class="text-slate-400 mb-6 text-sm leading-relaxed">
+                            透過複雜的 Prompt 鏈設計 (Prompt Chaining)，協助金融機構法務人員自動比對合約條款與法規差異，大幅降低人工審閱漏失。
+                        </p>
+                        
+                        <div class="pt-6 border-t border-slate-700 grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xs text-slate-500 mb-1">具體成果</p>
+                                <p class="text-lg font-bold text-accent-400">3x <span class="text-sm font-normal text-slate-400">審閱效率提升</span></p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 mb-1">核心技術</p>
+                                <p class="text-sm font-medium text-slate-300">Claude 3, Prompt 設計</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="absolute inset-0 z-10"><span class="sr-only">查看專案詳情</span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技術部落格 (Tech Blog) -->
+    <section id="blog" class="py-24 bg-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-brand-400 font-semibold tracking-wide uppercase text-sm mb-2">Latest Insights</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-white mb-6">AI 觀點與技術筆記</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 文章 1 -->
+                <article class="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden reveal card-hover flex flex-col">
+                    <img src="https://placehold.co/600x400/0f172a/60a5fa?text=Prompt+Tips" alt="文章圖片" class="w-full h-48 object-cover border-b border-slate-700">
+                    <div class="p-6 flex-grow flex flex-col">
+                        <div class="text-xs text-brand-400 mb-3 flex justify-between">
+                            <span>提示詞工程技巧</span>
+                            <span class="text-slate-500">2023.10.15</span>
+                        </div>
+                        <a href="#" class="text-xl font-bold text-white mb-3 hover:text-brand-400 transition-colors">如何寫出讓 LLM 秒懂的結構化 Prompt？3個實用框架分享</a>
+                        <p class="text-slate-400 text-sm mb-6 flex-grow line-clamp-3">
+                            在開發 AI 應用時，結構化的 Prompt 是穩定輸出的關鍵。本文分享 CREATE、RTF 等主流提示詞框架，教你如何有效控制模型行為。
+                        </p>
+                        <a href="#" class="text-brand-500 hover:text-brand-400 text-sm font-medium flex items-center mt-auto">
+                            閱讀全文 <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- 文章 2 -->
+                <article class="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden reveal card-hover flex flex-col" style="transition-delay: 100ms;">
+                    <img src="https://placehold.co/600x400/0f172a/34d399?text=AI+Trends" alt="文章圖片" class="w-full h-48 object-cover border-b border-slate-700">
+                    <div class="p-6 flex-grow flex flex-col">
+                        <div class="text-xs text-emerald-400 mb-3 flex justify-between">
+                            <span>AI 趨勢與洞察</span>
+                            <span class="text-slate-500">2023.09.28</span>
+                        </div>
+                        <a href="#" class="text-xl font-bold text-white mb-3 hover:text-brand-400 transition-colors">2024 企業導入 AI 的最大誤區：AI 不是萬靈丹</a>
+                        <p class="text-slate-400 text-sm mb-6 flex-grow line-clamp-3">
+                            許多企業主以為買了 API 就能數位轉型。探討在 AI 狂潮下，企業如何冷靜評估 ROI，並進行資料基礎建設的準備。
+                        </p>
+                        <a href="#" class="text-brand-500 hover:text-brand-400 text-sm font-medium flex items-center mt-auto">
+                            閱讀全文 <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- 文章 3 -->
+                <article class="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden reveal card-hover flex flex-col" style="transition-delay: 200ms;">
+                    <img src="https://placehold.co/600x400/0f172a/a78bfa?text=RAG+Architecture" alt="文章圖片" class="w-full h-48 object-cover border-b border-slate-700">
+                    <div class="p-6 flex-grow flex flex-col">
+                        <div class="text-xs text-purple-400 mb-3 flex justify-between">
+                            <span>實戰經驗分享</span>
+                            <span class="text-slate-500">2023.09.10</span>
+                        </div>
+                        <a href="#" class="text-xl font-bold text-white mb-3 hover:text-brand-400 transition-colors">RAG 系統落地指南：處理非結構化文件的踩坑紀錄</a>
+                        <p class="text-slate-400 text-sm mb-6 flex-grow line-clamp-3">
+                            實作檢索增強生成 (RAG) 時，PDF 解析與 Chunking 策略往往是成敗關鍵。分享我在上一個專案中遇到的挑戰與解決方案。
+                        </p>
+                        <a href="#" class="text-brand-500 hover:text-brand-400 text-sm font-medium flex items-center mt-auto">
+                            閱讀全文 <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="text-center mt-12 reveal">
+                <a href="#" class="px-6 py-3 rounded-full border border-slate-700 hover:bg-slate-800 text-slate-300 transition-colors text-sm font-medium inline-block">
+                    前往部落格看更多文章
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 聯絡我 (Contact) -->
+    <section id="contact" class="py-24 bg-slate-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="bg-slate-800 rounded-3xl p-8 md:p-16 border border-slate-700 shadow-2xl reveal">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <!-- 聯絡資訊 -->
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">準備好啟動您的 <br>AI 專案了嗎？</h2>
+                        <p class="text-slate-400 mb-10 leading-relaxed">
+                            無論是企業內訓、顧問諮詢，或是系統開發需求，都歡迎與我聯繫。請填寫右側表單，或直接透過下方管道與我交流。
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center text-slate-300">
+                                <div class="w-12 h-12 bg-slate-700/50 rounded-full flex items-center justify-center mr-4 border border-slate-600">
+                                    <i class="far fa-envelope text-brand-400"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 mb-1">Email</p>
+                                    <a href="mailto:hello@aiexpert.com" class="hover:text-brand-400 transition-colors font-medium">hello@aiexpert.com</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center text-slate-300">
+                                <div class="w-12 h-12 bg-slate-700/50 rounded-full flex items-center justify-center mr-4 border border-slate-600">
+                                    <i class="fab fa-linkedin-in text-brand-400"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500 mb-1">LinkedIn</p>
+                                    <a href="#" class="hover:text-brand-400 transition-colors font-medium">linkedin.com/in/aiexpert</a>
+                                </div>
+                            </div>
+
+                            <div class="pt-6">
+                                <a href="#" class="inline-flex items-center px-6 py-3 rounded-lg bg-[#006BFF] hover:bg-blue-600 text-white font-medium transition-colors">
+                                    <i class="far fa-calendar-alt mr-2"></i> 預約 Calendly 30 分鐘免費諮詢
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 聯絡表單 -->
+                    <div class="bg-slate-900 rounded-2xl p-8 border border-slate-700">
+                        <form onsubmit="event.preventDefault(); showMessage('感謝您的來信！我會盡快回覆您。');" class="space-y-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-slate-400 mb-2">姓名 / 稱呼</label>
+                                <input type="text" id="name" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" placeholder="您的名字" required>
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-slate-400 mb-2">Email</label>
+                                <input type="email" id="email" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors" placeholder="your@email.com" required>
+                            </div>
+
+                            <div>
+                                <label for="service" class="block text-sm font-medium text-slate-400 mb-2">感興趣的服務</label>
+                                <select id="service" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors">
+                                    <option>企業 AI 轉型顧問</option>
+                                    <option>Prompt 與系統開發</option>
+                                    <option>企業內訓工作坊</option>
+                                    <option>其他合作洽談</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-slate-400 mb-2">需求簡述</label>
+                                <textarea id="message" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors resize-none" placeholder="請簡單描述您目前的痛點或想達成的心願..." required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-lg shadow-brand-500/20">
+                                傳送訊息
+                            </button>
+                        </form>
+
+                        <!-- 自訂訊息對話框 (取代 alert) -->
+                        <div id="msgBox" class="hidden mt-4 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm text-center">
+                            訊息已送出
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頁尾 -->
+    <footer class="bg-slate-950 py-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <span class="text-xl font-bold text-white tracking-tighter">AI<span class="text-brand-400">Expert.</span></span>
+                <p class="text-slate-500 text-sm mt-2">© 2024 AI Expert Portfolio. All rights reserved.</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="#" class="text-slate-500 hover:text-white transition-colors"><i class="fab fa-github text-xl"></i></a>
+                <a href="#" class="text-slate-500 hover:text-white transition-colors"><i class="fab fa-twitter text-xl"></i></a>
+                <a href="#" class="text-slate-500 hover:text-white transition-colors"><i class="fab fa-medium text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 手機版選單切換
+        const btn = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // 點擊手機版選單連結後自動關閉選單
+        const mobileLinks = menu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // 導覽列滾動背景效果
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-lg');
+                navbar.style.background = 'rgba(15, 23, 42, 0.95)';
+            } else {
+                navbar.classList.remove('shadow-lg');
+                navbar.style.background = 'rgba(15, 23, 42, 0.8)';
+            }
+        });
+
+        // 表單送出訊息處理 (避免使用 alert)
+        function showMessage(text) {
+            const msgBox = document.getElementById('msgBox');
+            msgBox.textContent = text;
+            msgBox.classList.remove('hidden');
+            setTimeout(() => {
+                msgBox.classList.add('hidden');
+            }, 3000);
+            
+            // 清空表單
+            document.querySelector('form').reset();
+        }
+
+        // 滾動顯示動畫 (Scroll Reveal)
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100; // 元素距離底部多少時觸發
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        
+        window.addEventListener("scroll", reveal);
+        // 初始化檢查一次
+        reveal();
+    </script>
+</body>
+</html>
